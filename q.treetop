@@ -1,0 +1,314 @@
+require './q/scope'
+require './q/syntax'
+
+grammar Q
+  rule statements
+    statements:(ws* statement:(comment / statement) ws*)* ws* {
+      def eval scope
+        statements.elements.each do |statement|
+          statement.statement.eval scope
+        end
+
+        scope['_']
+      end
+    }
+  end
+
+  rule statement
+    expression ws* ';' {
+      def eval scope
+        scope['_'] = expression.eval scope
+      end
+    }
+  end
+
+  rule expression
+    call / assignment / conditional / binomial
+  end
+
+  rule function
+    '(' arguments:(ws* identifier ws*)* ')' '{' statements '}' <Q::Syntax::Function>
+  end
+
+  rule assignment
+    destination:(self / identifier) ws* '<:' ws* expression {
+      def eval scope
+        scope['_'] = scope[destination.text_value] = expression.eval scope
+      end
+    }
+  end
+
+  rule call
+    name:(function / self / identifier) ws* '(' arguments:(ws* argument:expression ws*)* ')' {
+      def eval scope
+        scope['_'] = name.eval(scope).call(callscope(scope))
+      end
+
+      def callscope scope
+        cscope = Q::Scope.new scope
+
+        cscope.args = arguments.elements.map.each do |argument|
+          argument.argument.eval(scope)
+        end
+
+        cscope
+      end
+    }
+  end
+
+  rule binomial
+    head:monomial ws* tail:(ws* operator:binomial_operator ws* feet:monomial)*
+    {
+      def eval scope
+        if has_feet?
+          return operator.apply(scope, head, feet)
+        end
+
+        scope['_'] = head.eval(scope)
+      end
+
+      def has_feet?
+        not tail.nil? and not tail.elements.first.nil? and not tail.elements.first.feet.nil?
+      end
+
+      def feet
+        return nil if not has_feet?
+
+        tail.elements.first.feet
+      end
+
+      def operator
+        return nil if not has_feet?
+
+        tail.elements.first.operator
+      end
+    }
+  end
+
+  rule monomial
+    head:primary ws* tail:(ws* operator:monomial_operator ws* feet:monomial)*
+    {
+      def eval scope
+        if has_feet?
+          feet = tail.elements.first.feet
+          return operator.apply(scope, head, feet)
+        end
+
+        scope['_'] = head.eval(scope)
+      end
+
+      def has_feet?
+        not tail.nil? and not tail.elements.first.nil? and not tail.elements.first.feet.nil?
+      end
+
+      def operator
+        return nil if not has_feet?
+
+        tail.elements.first.operator
+      end
+    }
+  end
+
+  rule conditional
+    'if' ws* '[' condition:(conditional_expression / statements) ']' ws*
+    'then' ws* '[' consequence:(conditional_expression / statements) ']'
+    otherwise:(ws* 'else' ws* '[' consequence:(conditional_expression / statements) ']')? <Q::Syntax::Conditional>
+  end
+
+  rule conditional_expression
+    ws* expression ws* &']' {
+      def eval scope
+        expression.eval scope
+      end
+    }
+  end
+
+  rule primary
+    call / function / self / unary / value / identifier / '(' ws* expression ws* ')' {
+      def eval scope
+        scope['_'] = expression.eval(scope)
+      end
+    }
+  end
+
+  rule binomial_operator
+    minus / plus / comparison_operators
+  end
+
+  rule monomial_operator
+    slash / star
+  end
+
+  rule unary
+    negative / negation
+  end
+
+  rule negation
+    '!' ws* primary {
+      def eval scope
+        not primary.eval(scope)
+      end
+    }
+  end
+
+  rule negative
+    '-' ws* primary {
+      def eval scope
+        - primary.eval(scope)
+      end
+    }
+  end
+
+  rule comparison_operators
+    lt / lte / gt / gte / neq / eq
+  end
+
+  rule lt
+    '<' {
+      def apply scope, a, b
+        a.eval(scope) < b.eval(scope)
+      end
+    }
+  end
+
+  rule gt
+    '>' {
+      def apply scope, a, b
+        a.eval(scope) < b.eval(scope)
+      end
+    }
+  end
+
+  rule lte
+    '<=' {
+      def apply scope, a, b
+        a.eval(scope) <= b.eval(scope)
+      end
+    }
+  end
+
+  rule gte
+    '>=' {
+      def apply scope, a, b
+        a.eval(scope) >= b.eval(scope)
+      end
+    }
+  end
+
+  rule eq
+    '=' {
+      def apply scope, a, b
+        a.eval(scope) == b.eval(scope)
+      end
+    }
+  end
+
+  rule neq
+    '!=' {
+      def apply scope, a, b
+        a.eval(scope) != b.eval(scope)
+      end
+    }
+  end
+
+  rule plus
+    '+' {
+      def apply scope, a, b
+        scope['_'] = a.eval(scope) + b.eval(scope)
+      end
+    }
+  end
+
+  rule minus
+    '-' {
+      def apply scope, a, b
+        scope['_'] = a.eval(scope) - b.eval(scope)
+      end
+    }
+  end
+
+  rule star
+    '*' {
+      def apply scope, a, b
+        scope['_'] = a.eval(scope) * b.eval(scope)
+      end
+    }
+  end
+
+  rule slash
+    '/' {
+      def apply scope, a, b
+        scope['_'] = a.eval(scope) / b.eval(scope)
+      end
+    }
+  end
+
+  rule value
+    number / truth / lie / nil
+  end
+
+  rule truth
+    'true' {
+      def eval scope
+        return true
+      end
+    }
+  end
+
+  rule lie
+    'false' {
+      def eval scope
+        return false
+      end
+    }
+  end
+
+  rule nil
+    'nil' {
+      def eval scope
+        return nil
+      end
+    }
+  end
+
+  rule number
+    [0-9]+ point:'.'? [0-9]*
+    {
+      def eval scope
+        if point.empty?
+          return scope['_'] = text_value.to_i
+        end
+
+        scope['_'] = text_value.to_f
+      end
+    }
+  end
+
+  rule identifier
+    [a-zA-Z_] [a-zA-Z0-9_]* ('?' / '!')? {
+      def eval scope
+        scope['_'] = scope[text_value]
+      end
+    }
+  end
+
+  rule self
+    '@' {
+      def eval scope
+        scope.this
+      end
+    }
+  end
+
+  rule comment
+    '#' (!("\n" / "\r") .)* ("\n" / "\r")+ {
+      def eval scope
+        # NO-OP, this is a comment for crying out loud! (:
+      end
+    }
+  end
+
+  rule ws
+    ' ' / "\n" / "\r"
+  end
+end

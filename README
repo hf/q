@@ -1,0 +1,42 @@
+
+  Q - a simple programming language
+
+      / Q Q Q Q
+        Q     Q
+        Q Q Q Q Q
+                Q
+                Q
+
+  Example syntax:
+
+    # assignment
+
+    a <: 10;
+    b <: 11;
+
+    # operations
+
+    a <: 3 + 5;
+    a <: a = b;
+    a <: a < b;
+    a <: b > a;
+
+    # functions
+
+    # @ refers to the current function
+    # every function returns @ by default
+    # unless you assign @ another value
+
+    factorial <: (n){
+      if [n < 2] then [@ <: 2] else [@ <: n * @(n - 1)];
+    };
+
+    tenth_factorial <: factorial(10);
+
+
+
+  This language is an experiment and parts of it were presented at
+  MKRUG (http://ruby.mk).
+
+  This software is licensed under the MIT/X11 license and is
+  Copyright (C) 2014 Stojan Dimitrovski. See LICENSE for more details.

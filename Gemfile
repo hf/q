@@ -1,5 +1,4 @@
-# A sample Gemfile
-source "https://rubygems.org"
+source 'https://rubygems.org'
 
-# gem "rails"
-gem "treetop"
+# Specify your gem's dependencies in q.gemspec
+gemspec

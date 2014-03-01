@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+require 'q'
+
+Q.load false
+
+vm = Q::VM.new
+
+FILES = ARGV.map do |argfile|
+  if not File.exist? argfile
+    puts "File #{argfile} does not exist."
+    exit 1
+  end
+
+  File.read argfile
+end
+
+FILES.each do |file|
+  vm.eval file
+end

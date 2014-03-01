@@ -7,6 +7,14 @@
                 Q
                 Q
 
+  Install the gem from RubyGems:
+
+    $ gem install ql
+
+  Then you can use the small `q' runner to run your .q files:
+
+    $ q examples/factorial.q
+
   Example syntax:
 
     # assignment

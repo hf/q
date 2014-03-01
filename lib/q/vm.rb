@@ -1,3 +1,6 @@
+require 'q/scope'
+require 'q/parser'
+
 module Q
   class ParsingException < StandardError
     def initialize input, failure_line, failure_index, failure_reason
@@ -33,9 +36,21 @@ module Q
     end
   end
 
+  class ToplevelScope < Q::Scope
+    def initialize
+      super()
+
+      self['puts'] = lambda { |scope|
+        puts scope.args
+      }
+    end
+  end
+
   class VM
     def initialize
-      @scope  = Q::Scope.new
+      Q.load
+
+      @scope  = ToplevelScope.new
       @parser = QParser.new
     end
 

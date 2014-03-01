@@ -1,5 +1,5 @@
-require './q/scope'
-require './q/syntax'
+require 'q/scope'
+require 'q/syntax'
 
 grammar Q
   rule statements
@@ -244,7 +244,7 @@ grammar Q
   end
 
   rule value
-    number / truth / lie / nil
+    number / string / truth / lie / nil
   end
 
   rule truth
@@ -267,6 +267,26 @@ grammar Q
     'nil' {
       def eval scope
         return nil
+      end
+    }
+  end
+
+  rule string
+    single_quote_string / double_quote_string
+  end
+
+  rule single_quote_string
+    "'" content:("\\'" / (!"'" .))* "'" {
+      def eval scope
+        content.text_value.gsub '\\\'', "'"
+      end
+    }
+  end
+
+  rule double_quote_string
+    '"' content:('\"' / (!'"' .))* '"' {
+      def eval scope
+        content.text_value.gsub '\"', '"'
       end
     }
   end

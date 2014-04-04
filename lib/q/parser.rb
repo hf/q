@@ -40,7 +40,7 @@ module Q
     if node_cache[:statements].has_key?(index)
       cached = node_cache[:statements][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:statements][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
@@ -65,10 +65,12 @@ module Q
         i5 = index
         r6 = _nt_comment
         if r6
+          r6 = SyntaxNode.new(input, (index-1)...index) if r6 == true
           r5 = r6
         else
           r7 = _nt_statement
           if r7
+            r7 = SyntaxNode.new(input, (index-1)...index) if r7 == true
             r5 = r7
           else
             @index = i5
@@ -150,7 +152,7 @@ module Q
     if node_cache[:statement].has_key?(index)
       cached = node_cache[:statement][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:statement][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
@@ -172,9 +174,9 @@ module Q
       r2 = instantiate_node(SyntaxNode,input, i2...index, s2)
       s0 << r2
       if r2
-        if has_terminal?(';', false, index)
-          r4 = instantiate_node(SyntaxNode,input, index...(index + 1))
-          @index += 1
+        if (match_len = has_terminal?(';', false, index))
+          r4 = true
+          @index += match_len
         else
           terminal_parse_failure(';')
           r4 = nil
@@ -201,7 +203,7 @@ module Q
     if node_cache[:expression].has_key?(index)
       cached = node_cache[:expression][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:expression][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
@@ -210,18 +212,22 @@ module Q
     i0 = index
     r1 = _nt_call
     if r1
+      r1 = SyntaxNode.new(input, (index-1)...index) if r1 == true
       r0 = r1
     else
       r2 = _nt_assignment
       if r2
+        r2 = SyntaxNode.new(input, (index-1)...index) if r2 == true
         r0 = r2
       else
         r3 = _nt_conditional
         if r3
+          r3 = SyntaxNode.new(input, (index-1)...index) if r3 == true
           r0 = r3
         else
           r4 = _nt_binomial
           if r4
+            r4 = SyntaxNode.new(input, (index-1)...index) if r4 == true
             r0 = r4
           else
             @index = i0
@@ -259,16 +265,16 @@ module Q
     if node_cache[:function].has_key?(index)
       cached = node_cache[:function][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:function][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
     end
 
     i0, s0 = index, []
-    if has_terminal?('(', false, index)
-      r1 = instantiate_node(SyntaxNode,input, index...(index + 1))
-      @index += 1
+    if (match_len = has_terminal?('(', false, index))
+      r1 = true
+      @index += match_len
     else
       terminal_parse_failure('(')
       r1 = nil
@@ -322,18 +328,18 @@ module Q
       r2 = instantiate_node(SyntaxNode,input, i2...index, s2)
       s0 << r2
       if r2
-        if has_terminal?(')', false, index)
-          r9 = instantiate_node(SyntaxNode,input, index...(index + 1))
-          @index += 1
+        if (match_len = has_terminal?(')', false, index))
+          r9 = true
+          @index += match_len
         else
           terminal_parse_failure(')')
           r9 = nil
         end
         s0 << r9
         if r9
-          if has_terminal?('{', false, index)
-            r10 = instantiate_node(SyntaxNode,input, index...(index + 1))
-            @index += 1
+          if (match_len = has_terminal?('{', false, index))
+            r10 = true
+            @index += match_len
           else
             terminal_parse_failure('{')
             r10 = nil
@@ -343,9 +349,9 @@ module Q
             r11 = _nt_statements
             s0 << r11
             if r11
-              if has_terminal?('}', false, index)
-                r12 = instantiate_node(SyntaxNode,input, index...(index + 1))
-                @index += 1
+              if (match_len = has_terminal?('}', false, index))
+                r12 = true
+                @index += match_len
               else
                 terminal_parse_failure('}')
                 r12 = nil
@@ -390,7 +396,7 @@ module Q
     if node_cache[:assignment].has_key?(index)
       cached = node_cache[:assignment][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:assignment][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
@@ -400,10 +406,12 @@ module Q
     i1 = index
     r2 = _nt_self
     if r2
+      r2 = SyntaxNode.new(input, (index-1)...index) if r2 == true
       r1 = r2
     else
       r3 = _nt_identifier
       if r3
+        r3 = SyntaxNode.new(input, (index-1)...index) if r3 == true
         r1 = r3
       else
         @index = i1
@@ -424,9 +432,9 @@ module Q
       r4 = instantiate_node(SyntaxNode,input, i4...index, s4)
       s0 << r4
       if r4
-        if has_terminal?('<:', false, index)
-          r6 = instantiate_node(SyntaxNode,input, index...(index + 2))
-          @index += 2
+        if (match_len = has_terminal?('<:', false, index))
+          r6 = instantiate_node(SyntaxNode,input, index...(index + match_len))
+          @index += match_len
         else
           terminal_parse_failure('<:')
           r6 = nil
@@ -504,7 +512,7 @@ module Q
     if node_cache[:call].has_key?(index)
       cached = node_cache[:call][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:call][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
@@ -514,14 +522,17 @@ module Q
     i1 = index
     r2 = _nt_function
     if r2
+      r2 = SyntaxNode.new(input, (index-1)...index) if r2 == true
       r1 = r2
     else
       r3 = _nt_self
       if r3
+        r3 = SyntaxNode.new(input, (index-1)...index) if r3 == true
         r1 = r3
       else
         r4 = _nt_identifier
         if r4
+          r4 = SyntaxNode.new(input, (index-1)...index) if r4 == true
           r1 = r4
         else
           @index = i1
@@ -543,9 +554,9 @@ module Q
       r5 = instantiate_node(SyntaxNode,input, i5...index, s5)
       s0 << r5
       if r5
-        if has_terminal?('(', false, index)
-          r7 = instantiate_node(SyntaxNode,input, index...(index + 1))
-          @index += 1
+        if (match_len = has_terminal?('(', false, index))
+          r7 = true
+          @index += match_len
         else
           terminal_parse_failure('(')
           r7 = nil
@@ -599,9 +610,9 @@ module Q
           r8 = instantiate_node(SyntaxNode,input, i8...index, s8)
           s0 << r8
           if r8
-            if has_terminal?(')', false, index)
-              r15 = instantiate_node(SyntaxNode,input, index...(index + 1))
-              @index += 1
+            if (match_len = has_terminal?(')', false, index))
+              r15 = true
+              @index += match_len
             else
               terminal_parse_failure(')')
               r15 = nil
@@ -676,7 +687,7 @@ module Q
     if node_cache[:binomial].has_key?(index)
       cached = node_cache[:binomial][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:binomial][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
@@ -810,7 +821,7 @@ module Q
     if node_cache[:monomial].has_key?(index)
       cached = node_cache[:monomial][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:monomial][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
@@ -924,16 +935,16 @@ module Q
     if node_cache[:conditional].has_key?(index)
       cached = node_cache[:conditional][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:conditional][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
     end
 
     i0, s0 = index, []
-    if has_terminal?('if', false, index)
-      r1 = instantiate_node(SyntaxNode,input, index...(index + 2))
-      @index += 2
+    if (match_len = has_terminal?('if', false, index))
+      r1 = instantiate_node(SyntaxNode,input, index...(index + match_len))
+      @index += match_len
     else
       terminal_parse_failure('if')
       r1 = nil
@@ -952,9 +963,9 @@ module Q
       r2 = instantiate_node(SyntaxNode,input, i2...index, s2)
       s0 << r2
       if r2
-        if has_terminal?('[', false, index)
-          r4 = instantiate_node(SyntaxNode,input, index...(index + 1))
-          @index += 1
+        if (match_len = has_terminal?('[', false, index))
+          r4 = true
+          @index += match_len
         else
           terminal_parse_failure('[')
           r4 = nil
@@ -964,10 +975,12 @@ module Q
           i5 = index
           r6 = _nt_conditional_expression
           if r6
+            r6 = SyntaxNode.new(input, (index-1)...index) if r6 == true
             r5 = r6
           else
             r7 = _nt_statements
             if r7
+              r7 = SyntaxNode.new(input, (index-1)...index) if r7 == true
               r5 = r7
             else
               @index = i5
@@ -976,9 +989,9 @@ module Q
           end
           s0 << r5
           if r5
-            if has_terminal?(']', false, index)
-              r8 = instantiate_node(SyntaxNode,input, index...(index + 1))
-              @index += 1
+            if (match_len = has_terminal?(']', false, index))
+              r8 = true
+              @index += match_len
             else
               terminal_parse_failure(']')
               r8 = nil
@@ -997,9 +1010,9 @@ module Q
               r9 = instantiate_node(SyntaxNode,input, i9...index, s9)
               s0 << r9
               if r9
-                if has_terminal?('then', false, index)
-                  r11 = instantiate_node(SyntaxNode,input, index...(index + 4))
-                  @index += 4
+                if (match_len = has_terminal?('then', false, index))
+                  r11 = instantiate_node(SyntaxNode,input, index...(index + match_len))
+                  @index += match_len
                 else
                   terminal_parse_failure('then')
                   r11 = nil
@@ -1018,9 +1031,9 @@ module Q
                   r12 = instantiate_node(SyntaxNode,input, i12...index, s12)
                   s0 << r12
                   if r12
-                    if has_terminal?('[', false, index)
-                      r14 = instantiate_node(SyntaxNode,input, index...(index + 1))
-                      @index += 1
+                    if (match_len = has_terminal?('[', false, index))
+                      r14 = true
+                      @index += match_len
                     else
                       terminal_parse_failure('[')
                       r14 = nil
@@ -1030,10 +1043,12 @@ module Q
                       i15 = index
                       r16 = _nt_conditional_expression
                       if r16
+                        r16 = SyntaxNode.new(input, (index-1)...index) if r16 == true
                         r15 = r16
                       else
                         r17 = _nt_statements
                         if r17
+                          r17 = SyntaxNode.new(input, (index-1)...index) if r17 == true
                           r15 = r17
                         else
                           @index = i15
@@ -1042,9 +1057,9 @@ module Q
                       end
                       s0 << r15
                       if r15
-                        if has_terminal?(']', false, index)
-                          r18 = instantiate_node(SyntaxNode,input, index...(index + 1))
-                          @index += 1
+                        if (match_len = has_terminal?(']', false, index))
+                          r18 = true
+                          @index += match_len
                         else
                           terminal_parse_failure(']')
                           r18 = nil
@@ -1064,9 +1079,9 @@ module Q
                           r21 = instantiate_node(SyntaxNode,input, i21...index, s21)
                           s20 << r21
                           if r21
-                            if has_terminal?('else', false, index)
-                              r23 = instantiate_node(SyntaxNode,input, index...(index + 4))
-                              @index += 4
+                            if (match_len = has_terminal?('else', false, index))
+                              r23 = instantiate_node(SyntaxNode,input, index...(index + match_len))
+                              @index += match_len
                             else
                               terminal_parse_failure('else')
                               r23 = nil
@@ -1085,9 +1100,9 @@ module Q
                               r24 = instantiate_node(SyntaxNode,input, i24...index, s24)
                               s20 << r24
                               if r24
-                                if has_terminal?('[', false, index)
-                                  r26 = instantiate_node(SyntaxNode,input, index...(index + 1))
-                                  @index += 1
+                                if (match_len = has_terminal?('[', false, index))
+                                  r26 = true
+                                  @index += match_len
                                 else
                                   terminal_parse_failure('[')
                                   r26 = nil
@@ -1097,10 +1112,12 @@ module Q
                                   i27 = index
                                   r28 = _nt_conditional_expression
                                   if r28
+                                    r28 = SyntaxNode.new(input, (index-1)...index) if r28 == true
                                     r27 = r28
                                   else
                                     r29 = _nt_statements
                                     if r29
+                                      r29 = SyntaxNode.new(input, (index-1)...index) if r29 == true
                                       r27 = r29
                                     else
                                       @index = i27
@@ -1109,9 +1126,9 @@ module Q
                                   end
                                   s20 << r27
                                   if r27
-                                    if has_terminal?(']', false, index)
-                                      r30 = instantiate_node(SyntaxNode,input, index...(index + 1))
-                                      @index += 1
+                                    if (match_len = has_terminal?(']', false, index))
+                                      r30 = true
+                                      @index += match_len
                                     else
                                       terminal_parse_failure(']')
                                       r30 = nil
@@ -1177,7 +1194,7 @@ module Q
     if node_cache[:conditional_expression].has_key?(index)
       cached = node_cache[:conditional_expression][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:conditional_expression][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
@@ -1212,9 +1229,9 @@ module Q
         s0 << r4
         if r4
           i6 = index
-          if has_terminal?(']', false, index)
-            r7 = instantiate_node(SyntaxNode,input, index...(index + 1))
-            @index += 1
+          if (match_len = has_terminal?(']', false, index))
+            r7 = true
+            @index += match_len
           else
             terminal_parse_failure(']')
             r7 = nil
@@ -1261,7 +1278,7 @@ module Q
     if node_cache[:primary].has_key?(index)
       cached = node_cache[:primary][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:primary][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
@@ -1270,32 +1287,38 @@ module Q
     i0 = index
     r1 = _nt_call
     if r1
+      r1 = SyntaxNode.new(input, (index-1)...index) if r1 == true
       r0 = r1
     else
       r2 = _nt_function
       if r2
+        r2 = SyntaxNode.new(input, (index-1)...index) if r2 == true
         r0 = r2
       else
         r3 = _nt_self
         if r3
+          r3 = SyntaxNode.new(input, (index-1)...index) if r3 == true
           r0 = r3
         else
           r4 = _nt_unary
           if r4
+            r4 = SyntaxNode.new(input, (index-1)...index) if r4 == true
             r0 = r4
           else
             r5 = _nt_value
             if r5
+              r5 = SyntaxNode.new(input, (index-1)...index) if r5 == true
               r0 = r5
             else
               r6 = _nt_identifier
               if r6
+                r6 = SyntaxNode.new(input, (index-1)...index) if r6 == true
                 r0 = r6
               else
                 i7, s7 = index, []
-                if has_terminal?('(', false, index)
-                  r8 = instantiate_node(SyntaxNode,input, index...(index + 1))
-                  @index += 1
+                if (match_len = has_terminal?('(', false, index))
+                  r8 = true
+                  @index += match_len
                 else
                   terminal_parse_failure('(')
                   r8 = nil
@@ -1329,9 +1352,9 @@ module Q
                       r12 = instantiate_node(SyntaxNode,input, i12...index, s12)
                       s7 << r12
                       if r12
-                        if has_terminal?(')', false, index)
-                          r14 = instantiate_node(SyntaxNode,input, index...(index + 1))
-                          @index += 1
+                        if (match_len = has_terminal?(')', false, index))
+                          r14 = true
+                          @index += match_len
                         else
                           terminal_parse_failure(')')
                           r14 = nil
@@ -1350,6 +1373,7 @@ module Q
                   r7 = nil
                 end
                 if r7
+                  r7 = SyntaxNode.new(input, (index-1)...index) if r7 == true
                   r0 = r7
                 else
                   @index = i0
@@ -1372,7 +1396,7 @@ module Q
     if node_cache[:binomial_operator].has_key?(index)
       cached = node_cache[:binomial_operator][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:binomial_operator][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
@@ -1381,14 +1405,17 @@ module Q
     i0 = index
     r1 = _nt_minus
     if r1
+      r1 = SyntaxNode.new(input, (index-1)...index) if r1 == true
       r0 = r1
     else
       r2 = _nt_plus
       if r2
+        r2 = SyntaxNode.new(input, (index-1)...index) if r2 == true
         r0 = r2
       else
         r3 = _nt_comparison_operators
         if r3
+          r3 = SyntaxNode.new(input, (index-1)...index) if r3 == true
           r0 = r3
         else
           @index = i0
@@ -1407,7 +1434,7 @@ module Q
     if node_cache[:monomial_operator].has_key?(index)
       cached = node_cache[:monomial_operator][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:monomial_operator][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
@@ -1416,10 +1443,12 @@ module Q
     i0 = index
     r1 = _nt_slash
     if r1
+      r1 = SyntaxNode.new(input, (index-1)...index) if r1 == true
       r0 = r1
     else
       r2 = _nt_star
       if r2
+        r2 = SyntaxNode.new(input, (index-1)...index) if r2 == true
         r0 = r2
       else
         @index = i0
@@ -1437,7 +1466,7 @@ module Q
     if node_cache[:unary].has_key?(index)
       cached = node_cache[:unary][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:unary][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
@@ -1446,10 +1475,12 @@ module Q
     i0 = index
     r1 = _nt_negative
     if r1
+      r1 = SyntaxNode.new(input, (index-1)...index) if r1 == true
       r0 = r1
     else
       r2 = _nt_negation
       if r2
+        r2 = SyntaxNode.new(input, (index-1)...index) if r2 == true
         r0 = r2
       else
         @index = i0
@@ -1479,16 +1510,16 @@ module Q
     if node_cache[:negation].has_key?(index)
       cached = node_cache[:negation][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:negation][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
     end
 
     i0, s0 = index, []
-    if has_terminal?('!', false, index)
-      r1 = instantiate_node(SyntaxNode,input, index...(index + 1))
-      @index += 1
+    if (match_len = has_terminal?('!', false, index))
+      r1 = true
+      @index += match_len
     else
       terminal_parse_failure('!')
       r1 = nil
@@ -1542,16 +1573,16 @@ module Q
     if node_cache[:negative].has_key?(index)
       cached = node_cache[:negative][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:negative][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
     end
 
     i0, s0 = index, []
-    if has_terminal?('-', false, index)
-      r1 = instantiate_node(SyntaxNode,input, index...(index + 1))
-      @index += 1
+    if (match_len = has_terminal?('-', false, index))
+      r1 = true
+      @index += match_len
     else
       terminal_parse_failure('-')
       r1 = nil
@@ -1593,7 +1624,7 @@ module Q
     if node_cache[:comparison_operators].has_key?(index)
       cached = node_cache[:comparison_operators][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:comparison_operators][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
@@ -1602,26 +1633,32 @@ module Q
     i0 = index
     r1 = _nt_lt
     if r1
+      r1 = SyntaxNode.new(input, (index-1)...index) if r1 == true
       r0 = r1
     else
       r2 = _nt_lte
       if r2
+        r2 = SyntaxNode.new(input, (index-1)...index) if r2 == true
         r0 = r2
       else
         r3 = _nt_gt
         if r3
+          r3 = SyntaxNode.new(input, (index-1)...index) if r3 == true
           r0 = r3
         else
           r4 = _nt_gte
           if r4
+            r4 = SyntaxNode.new(input, (index-1)...index) if r4 == true
             r0 = r4
           else
             r5 = _nt_neq
             if r5
+              r5 = SyntaxNode.new(input, (index-1)...index) if r5 == true
               r0 = r5
             else
               r6 = _nt_eq
               if r6
+                r6 = SyntaxNode.new(input, (index-1)...index) if r6 == true
                 r0 = r6
               else
                 @index = i0
@@ -1649,16 +1686,16 @@ module Q
     if node_cache[:lt].has_key?(index)
       cached = node_cache[:lt][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:lt][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
     end
 
-    if has_terminal?('<', false, index)
-      r0 = instantiate_node(SyntaxNode,input, index...(index + 1))
+    if (match_len = has_terminal?('<', false, index))
+      r0 = instantiate_node(SyntaxNode,input, index...(index + match_len))
       r0.extend(Lt0)
-      @index += 1
+      @index += match_len
     else
       terminal_parse_failure('<')
       r0 = nil
@@ -1671,7 +1708,7 @@ module Q
 
   module Gt0
     def apply scope, a, b
-      a.eval(scope) < b.eval(scope)
+      a.eval(scope) > b.eval(scope)
     end
   end
 
@@ -1680,16 +1717,16 @@ module Q
     if node_cache[:gt].has_key?(index)
       cached = node_cache[:gt][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:gt][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
     end
 
-    if has_terminal?('>', false, index)
-      r0 = instantiate_node(SyntaxNode,input, index...(index + 1))
+    if (match_len = has_terminal?('>', false, index))
+      r0 = instantiate_node(SyntaxNode,input, index...(index + match_len))
       r0.extend(Gt0)
-      @index += 1
+      @index += match_len
     else
       terminal_parse_failure('>')
       r0 = nil
@@ -1711,16 +1748,16 @@ module Q
     if node_cache[:lte].has_key?(index)
       cached = node_cache[:lte][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:lte][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
     end
 
-    if has_terminal?('<=', false, index)
-      r0 = instantiate_node(SyntaxNode,input, index...(index + 2))
+    if (match_len = has_terminal?('<=', false, index))
+      r0 = instantiate_node(SyntaxNode,input, index...(index + match_len))
       r0.extend(Lte0)
-      @index += 2
+      @index += match_len
     else
       terminal_parse_failure('<=')
       r0 = nil
@@ -1742,16 +1779,16 @@ module Q
     if node_cache[:gte].has_key?(index)
       cached = node_cache[:gte][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:gte][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
     end
 
-    if has_terminal?('>=', false, index)
-      r0 = instantiate_node(SyntaxNode,input, index...(index + 2))
+    if (match_len = has_terminal?('>=', false, index))
+      r0 = instantiate_node(SyntaxNode,input, index...(index + match_len))
       r0.extend(Gte0)
-      @index += 2
+      @index += match_len
     else
       terminal_parse_failure('>=')
       r0 = nil
@@ -1773,16 +1810,16 @@ module Q
     if node_cache[:eq].has_key?(index)
       cached = node_cache[:eq][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:eq][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
     end
 
-    if has_terminal?('=', false, index)
-      r0 = instantiate_node(SyntaxNode,input, index...(index + 1))
+    if (match_len = has_terminal?('=', false, index))
+      r0 = instantiate_node(SyntaxNode,input, index...(index + match_len))
       r0.extend(Eq0)
-      @index += 1
+      @index += match_len
     else
       terminal_parse_failure('=')
       r0 = nil
@@ -1804,16 +1841,16 @@ module Q
     if node_cache[:neq].has_key?(index)
       cached = node_cache[:neq][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:neq][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
     end
 
-    if has_terminal?('!=', false, index)
-      r0 = instantiate_node(SyntaxNode,input, index...(index + 2))
+    if (match_len = has_terminal?('!=', false, index))
+      r0 = instantiate_node(SyntaxNode,input, index...(index + match_len))
       r0.extend(Neq0)
-      @index += 2
+      @index += match_len
     else
       terminal_parse_failure('!=')
       r0 = nil
@@ -1835,16 +1872,16 @@ module Q
     if node_cache[:plus].has_key?(index)
       cached = node_cache[:plus][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:plus][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
     end
 
-    if has_terminal?('+', false, index)
-      r0 = instantiate_node(SyntaxNode,input, index...(index + 1))
+    if (match_len = has_terminal?('+', false, index))
+      r0 = instantiate_node(SyntaxNode,input, index...(index + match_len))
       r0.extend(Plus0)
-      @index += 1
+      @index += match_len
     else
       terminal_parse_failure('+')
       r0 = nil
@@ -1866,16 +1903,16 @@ module Q
     if node_cache[:minus].has_key?(index)
       cached = node_cache[:minus][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:minus][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
     end
 
-    if has_terminal?('-', false, index)
-      r0 = instantiate_node(SyntaxNode,input, index...(index + 1))
+    if (match_len = has_terminal?('-', false, index))
+      r0 = instantiate_node(SyntaxNode,input, index...(index + match_len))
       r0.extend(Minus0)
-      @index += 1
+      @index += match_len
     else
       terminal_parse_failure('-')
       r0 = nil
@@ -1897,16 +1934,16 @@ module Q
     if node_cache[:star].has_key?(index)
       cached = node_cache[:star][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:star][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
     end
 
-    if has_terminal?('*', false, index)
-      r0 = instantiate_node(SyntaxNode,input, index...(index + 1))
+    if (match_len = has_terminal?('*', false, index))
+      r0 = instantiate_node(SyntaxNode,input, index...(index + match_len))
       r0.extend(Star0)
-      @index += 1
+      @index += match_len
     else
       terminal_parse_failure('*')
       r0 = nil
@@ -1928,16 +1965,16 @@ module Q
     if node_cache[:slash].has_key?(index)
       cached = node_cache[:slash][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:slash][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
     end
 
-    if has_terminal?('/', false, index)
-      r0 = instantiate_node(SyntaxNode,input, index...(index + 1))
+    if (match_len = has_terminal?('/', false, index))
+      r0 = instantiate_node(SyntaxNode,input, index...(index + match_len))
       r0.extend(Slash0)
-      @index += 1
+      @index += match_len
     else
       terminal_parse_failure('/')
       r0 = nil
@@ -1953,7 +1990,7 @@ module Q
     if node_cache[:value].has_key?(index)
       cached = node_cache[:value][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:value][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
@@ -1962,22 +1999,27 @@ module Q
     i0 = index
     r1 = _nt_number
     if r1
+      r1 = SyntaxNode.new(input, (index-1)...index) if r1 == true
       r0 = r1
     else
       r2 = _nt_string
       if r2
+        r2 = SyntaxNode.new(input, (index-1)...index) if r2 == true
         r0 = r2
       else
         r3 = _nt_truth
         if r3
+          r3 = SyntaxNode.new(input, (index-1)...index) if r3 == true
           r0 = r3
         else
           r4 = _nt_lie
           if r4
+            r4 = SyntaxNode.new(input, (index-1)...index) if r4 == true
             r0 = r4
           else
             r5 = _nt_nil
             if r5
+              r5 = SyntaxNode.new(input, (index-1)...index) if r5 == true
               r0 = r5
             else
               @index = i0
@@ -2004,16 +2046,16 @@ module Q
     if node_cache[:truth].has_key?(index)
       cached = node_cache[:truth][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:truth][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
     end
 
-    if has_terminal?('true', false, index)
-      r0 = instantiate_node(SyntaxNode,input, index...(index + 4))
+    if (match_len = has_terminal?('true', false, index))
+      r0 = instantiate_node(SyntaxNode,input, index...(index + match_len))
       r0.extend(Truth0)
-      @index += 4
+      @index += match_len
     else
       terminal_parse_failure('true')
       r0 = nil
@@ -2035,16 +2077,16 @@ module Q
     if node_cache[:lie].has_key?(index)
       cached = node_cache[:lie][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:lie][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
     end
 
-    if has_terminal?('false', false, index)
-      r0 = instantiate_node(SyntaxNode,input, index...(index + 5))
+    if (match_len = has_terminal?('false', false, index))
+      r0 = instantiate_node(SyntaxNode,input, index...(index + match_len))
       r0.extend(Lie0)
-      @index += 5
+      @index += match_len
     else
       terminal_parse_failure('false')
       r0 = nil
@@ -2066,16 +2108,16 @@ module Q
     if node_cache[:nil].has_key?(index)
       cached = node_cache[:nil][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:nil][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
     end
 
-    if has_terminal?('nil', false, index)
-      r0 = instantiate_node(SyntaxNode,input, index...(index + 3))
+    if (match_len = has_terminal?('nil', false, index))
+      r0 = instantiate_node(SyntaxNode,input, index...(index + match_len))
       r0.extend(Nil0)
-      @index += 3
+      @index += match_len
     else
       terminal_parse_failure('nil')
       r0 = nil
@@ -2091,7 +2133,7 @@ module Q
     if node_cache[:string].has_key?(index)
       cached = node_cache[:string][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:string][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
@@ -2100,10 +2142,12 @@ module Q
     i0 = index
     r1 = _nt_single_quote_string
     if r1
+      r1 = SyntaxNode.new(input, (index-1)...index) if r1 == true
       r0 = r1
     else
       r2 = _nt_double_quote_string
       if r2
+        r2 = SyntaxNode.new(input, (index-1)...index) if r2 == true
         r0 = r2
       else
         @index = i0
@@ -2137,16 +2181,16 @@ module Q
     if node_cache[:single_quote_string].has_key?(index)
       cached = node_cache[:single_quote_string][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:single_quote_string][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
     end
 
     i0, s0 = index, []
-    if has_terminal?("'", false, index)
-      r1 = instantiate_node(SyntaxNode,input, index...(index + 1))
-      @index += 1
+    if (match_len = has_terminal?("'", false, index))
+      r1 = true
+      @index += match_len
     else
       terminal_parse_failure("'")
       r1 = nil
@@ -2156,21 +2200,22 @@ module Q
       s2, i2 = [], index
       loop do
         i3 = index
-        if has_terminal?("\\'", false, index)
-          r4 = instantiate_node(SyntaxNode,input, index...(index + 2))
-          @index += 2
+        if (match_len = has_terminal?("\\'", false, index))
+          r4 = instantiate_node(SyntaxNode,input, index...(index + match_len))
+          @index += match_len
         else
           terminal_parse_failure("\\'")
           r4 = nil
         end
         if r4
+          r4 = SyntaxNode.new(input, (index-1)...index) if r4 == true
           r3 = r4
         else
           i5, s5 = index, []
           i6 = index
-          if has_terminal?("'", false, index)
-            r7 = instantiate_node(SyntaxNode,input, index...(index + 1))
-            @index += 1
+          if (match_len = has_terminal?("'", false, index))
+            r7 = true
+            @index += match_len
           else
             terminal_parse_failure("'")
             r7 = nil
@@ -2184,7 +2229,7 @@ module Q
           s5 << r6
           if r6
             if index < input_length
-              r8 = instantiate_node(SyntaxNode,input, index...(index + 1))
+              r8 = true
               @index += 1
             else
               terminal_parse_failure("any character")
@@ -2200,6 +2245,7 @@ module Q
             r5 = nil
           end
           if r5
+            r5 = SyntaxNode.new(input, (index-1)...index) if r5 == true
             r3 = r5
           else
             @index = i3
@@ -2215,9 +2261,9 @@ module Q
       r2 = instantiate_node(SyntaxNode,input, i2...index, s2)
       s0 << r2
       if r2
-        if has_terminal?("'", false, index)
-          r9 = instantiate_node(SyntaxNode,input, index...(index + 1))
-          @index += 1
+        if (match_len = has_terminal?("'", false, index))
+          r9 = true
+          @index += match_len
         else
           terminal_parse_failure("'")
           r9 = nil
@@ -2260,16 +2306,16 @@ module Q
     if node_cache[:double_quote_string].has_key?(index)
       cached = node_cache[:double_quote_string][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:double_quote_string][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
     end
 
     i0, s0 = index, []
-    if has_terminal?('"', false, index)
-      r1 = instantiate_node(SyntaxNode,input, index...(index + 1))
-      @index += 1
+    if (match_len = has_terminal?('"', false, index))
+      r1 = true
+      @index += match_len
     else
       terminal_parse_failure('"')
       r1 = nil
@@ -2279,21 +2325,22 @@ module Q
       s2, i2 = [], index
       loop do
         i3 = index
-        if has_terminal?('\"', false, index)
-          r4 = instantiate_node(SyntaxNode,input, index...(index + 2))
-          @index += 2
+        if (match_len = has_terminal?('\"', false, index))
+          r4 = instantiate_node(SyntaxNode,input, index...(index + match_len))
+          @index += match_len
         else
           terminal_parse_failure('\"')
           r4 = nil
         end
         if r4
+          r4 = SyntaxNode.new(input, (index-1)...index) if r4 == true
           r3 = r4
         else
           i5, s5 = index, []
           i6 = index
-          if has_terminal?('"', false, index)
-            r7 = instantiate_node(SyntaxNode,input, index...(index + 1))
-            @index += 1
+          if (match_len = has_terminal?('"', false, index))
+            r7 = true
+            @index += match_len
           else
             terminal_parse_failure('"')
             r7 = nil
@@ -2307,7 +2354,7 @@ module Q
           s5 << r6
           if r6
             if index < input_length
-              r8 = instantiate_node(SyntaxNode,input, index...(index + 1))
+              r8 = true
               @index += 1
             else
               terminal_parse_failure("any character")
@@ -2323,6 +2370,7 @@ module Q
             r5 = nil
           end
           if r5
+            r5 = SyntaxNode.new(input, (index-1)...index) if r5 == true
             r3 = r5
           else
             @index = i3
@@ -2338,9 +2386,9 @@ module Q
       r2 = instantiate_node(SyntaxNode,input, i2...index, s2)
       s0 << r2
       if r2
-        if has_terminal?('"', false, index)
-          r9 = instantiate_node(SyntaxNode,input, index...(index + 1))
-          @index += 1
+        if (match_len = has_terminal?('"', false, index))
+          r9 = true
+          @index += match_len
         else
           terminal_parse_failure('"')
           r9 = nil
@@ -2384,7 +2432,7 @@ module Q
     if node_cache[:number].has_key?(index)
       cached = node_cache[:number][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:number][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
@@ -2393,10 +2441,11 @@ module Q
     i0, s0 = index, []
     s1, i1 = [], index
     loop do
-      if has_terminal?('\G[0-9]', true, index)
+      if has_terminal?(@regexps[gr = '\A[0-9]'] ||= Regexp.new(gr), :regexp, index)
         r2 = true
         @index += 1
       else
+        terminal_parse_failure('[0-9]')
         r2 = nil
       end
       if r2
@@ -2413,9 +2462,9 @@ module Q
     end
     s0 << r1
     if r1
-      if has_terminal?('.', false, index)
-        r4 = instantiate_node(SyntaxNode,input, index...(index + 1))
-        @index += 1
+      if (match_len = has_terminal?('.', false, index))
+        r4 = true
+        @index += match_len
       else
         terminal_parse_failure('.')
         r4 = nil
@@ -2429,10 +2478,11 @@ module Q
       if r3
         s5, i5 = [], index
         loop do
-          if has_terminal?('\G[0-9]', true, index)
+          if has_terminal?(@regexps[gr = '\A[0-9]'] ||= Regexp.new(gr), :regexp, index)
             r6 = true
             @index += 1
           else
+            terminal_parse_failure('[0-9]')
             r6 = nil
           end
           if r6
@@ -2473,27 +2523,29 @@ module Q
     if node_cache[:identifier].has_key?(index)
       cached = node_cache[:identifier][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:identifier][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
     end
 
     i0, s0 = index, []
-    if has_terminal?('\G[a-zA-Z_]', true, index)
+    if has_terminal?(@regexps[gr = '\A[a-zA-Z_]'] ||= Regexp.new(gr), :regexp, index)
       r1 = true
       @index += 1
     else
+      terminal_parse_failure('[a-zA-Z_]')
       r1 = nil
     end
     s0 << r1
     if r1
       s2, i2 = [], index
       loop do
-        if has_terminal?('\G[a-zA-Z0-9_]', true, index)
+        if has_terminal?(@regexps[gr = '\A[a-zA-Z0-9_]'] ||= Regexp.new(gr), :regexp, index)
           r3 = true
           @index += 1
         else
+          terminal_parse_failure('[a-zA-Z0-9_]')
           r3 = nil
         end
         if r3
@@ -2506,24 +2558,26 @@ module Q
       s0 << r2
       if r2
         i5 = index
-        if has_terminal?('?', false, index)
-          r6 = instantiate_node(SyntaxNode,input, index...(index + 1))
-          @index += 1
+        if (match_len = has_terminal?('?', false, index))
+          r6 = true
+          @index += match_len
         else
           terminal_parse_failure('?')
           r6 = nil
         end
         if r6
+          r6 = SyntaxNode.new(input, (index-1)...index) if r6 == true
           r5 = r6
         else
-          if has_terminal?('!', false, index)
-            r7 = instantiate_node(SyntaxNode,input, index...(index + 1))
-            @index += 1
+          if (match_len = has_terminal?('!', false, index))
+            r7 = true
+            @index += match_len
           else
             terminal_parse_failure('!')
             r7 = nil
           end
           if r7
+            r7 = SyntaxNode.new(input, (index-1)...index) if r7 == true
             r5 = r7
           else
             @index = i5
@@ -2563,16 +2617,16 @@ module Q
     if node_cache[:self].has_key?(index)
       cached = node_cache[:self][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:self][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
     end
 
-    if has_terminal?('@', false, index)
-      r0 = instantiate_node(SyntaxNode,input, index...(index + 1))
+    if (match_len = has_terminal?('@', false, index))
+      r0 = instantiate_node(SyntaxNode,input, index...(index + match_len))
       r0.extend(Self0)
-      @index += 1
+      @index += match_len
     else
       terminal_parse_failure('@')
       r0 = nil
@@ -2600,16 +2654,16 @@ module Q
     if node_cache[:comment].has_key?(index)
       cached = node_cache[:comment][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:comment][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
     end
 
     i0, s0 = index, []
-    if has_terminal?('#', false, index)
-      r1 = instantiate_node(SyntaxNode,input, index...(index + 1))
-      @index += 1
+    if (match_len = has_terminal?('#', false, index))
+      r1 = true
+      @index += match_len
     else
       terminal_parse_failure('#')
       r1 = nil
@@ -2621,24 +2675,26 @@ module Q
         i3, s3 = index, []
         i4 = index
         i5 = index
-        if has_terminal?("\n", false, index)
-          r6 = instantiate_node(SyntaxNode,input, index...(index + 1))
-          @index += 1
+        if (match_len = has_terminal?("\n", false, index))
+          r6 = true
+          @index += match_len
         else
           terminal_parse_failure("\n")
           r6 = nil
         end
         if r6
+          r6 = SyntaxNode.new(input, (index-1)...index) if r6 == true
           r5 = r6
         else
-          if has_terminal?("\r", false, index)
-            r7 = instantiate_node(SyntaxNode,input, index...(index + 1))
-            @index += 1
+          if (match_len = has_terminal?("\r", false, index))
+            r7 = true
+            @index += match_len
           else
             terminal_parse_failure("\r")
             r7 = nil
           end
           if r7
+            r7 = SyntaxNode.new(input, (index-1)...index) if r7 == true
             r5 = r7
           else
             @index = i5
@@ -2654,7 +2710,7 @@ module Q
         s3 << r4
         if r4
           if index < input_length
-            r8 = instantiate_node(SyntaxNode,input, index...(index + 1))
+            r8 = true
             @index += 1
           else
             terminal_parse_failure("any character")
@@ -2681,24 +2737,26 @@ module Q
         s9, i9 = [], index
         loop do
           i10 = index
-          if has_terminal?("\n", false, index)
-            r11 = instantiate_node(SyntaxNode,input, index...(index + 1))
-            @index += 1
+          if (match_len = has_terminal?("\n", false, index))
+            r11 = true
+            @index += match_len
           else
             terminal_parse_failure("\n")
             r11 = nil
           end
           if r11
+            r11 = SyntaxNode.new(input, (index-1)...index) if r11 == true
             r10 = r11
           else
-            if has_terminal?("\r", false, index)
-              r12 = instantiate_node(SyntaxNode,input, index...(index + 1))
-              @index += 1
+            if (match_len = has_terminal?("\r", false, index))
+              r12 = true
+              @index += match_len
             else
               terminal_parse_failure("\r")
               r12 = nil
             end
             if r12
+              r12 = SyntaxNode.new(input, (index-1)...index) if r12 == true
               r10 = r12
             else
               @index = i10
@@ -2739,41 +2797,44 @@ module Q
     if node_cache[:ws].has_key?(index)
       cached = node_cache[:ws][index]
       if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        node_cache[:ws][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
       end
       return cached
     end
 
     i0 = index
-    if has_terminal?(' ', false, index)
-      r1 = instantiate_node(SyntaxNode,input, index...(index + 1))
-      @index += 1
+    if (match_len = has_terminal?(' ', false, index))
+      r1 = true
+      @index += match_len
     else
       terminal_parse_failure(' ')
       r1 = nil
     end
     if r1
+      r1 = SyntaxNode.new(input, (index-1)...index) if r1 == true
       r0 = r1
     else
-      if has_terminal?("\n", false, index)
-        r2 = instantiate_node(SyntaxNode,input, index...(index + 1))
-        @index += 1
+      if (match_len = has_terminal?("\n", false, index))
+        r2 = true
+        @index += match_len
       else
         terminal_parse_failure("\n")
         r2 = nil
       end
       if r2
+        r2 = SyntaxNode.new(input, (index-1)...index) if r2 == true
         r0 = r2
       else
-        if has_terminal?("\r", false, index)
-          r3 = instantiate_node(SyntaxNode,input, index...(index + 1))
-          @index += 1
+        if (match_len = has_terminal?("\r", false, index))
+          r3 = true
+          @index += match_len
         else
           terminal_parse_failure("\r")
           r3 = nil
         end
         if r3
+          r3 = SyntaxNode.new(input, (index-1)...index) if r3 == true
           r0 = r3
         else
           @index = i0

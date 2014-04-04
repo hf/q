@@ -174,7 +174,7 @@ grammar Q
   rule gt
     '>' {
       def apply scope, a, b
-        a.eval(scope) < b.eval(scope)
+        a.eval(scope) > b.eval(scope)
       end
     }
   end
